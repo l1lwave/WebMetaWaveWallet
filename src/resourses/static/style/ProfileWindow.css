@@ -1,0 +1,149 @@
+.container {
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.head {
+    width: 100%;
+    height: 70px;
+    box-shadow: 4px 4px 35px #000;
+    display: flex;
+    justify-content: center;
+}
+
+.head-center-area{
+    width: 420px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.back-btn{
+    max-width: 130px;
+    height: clamp(50px, 10vh, 65px);
+    margin: 10px;
+    padding: 0 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #121212;
+    display: flex;
+    align-items: center;
+}
+
+.back-btn img{
+    width: 30px;
+}
+
+.userNumber {
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: clamp(16px, 10vw, 24px);
+    font-weight: bold;
+}
+
+.buttons-function {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.button-func {
+    flex: 1;
+    max-width: 130px;
+    height: clamp(50px, 10vh, 65px);
+    margin: 10px;
+    padding: 0 10px;
+    border-radius: 20px;
+    border: 5px solid #000;
+    cursor: pointer;
+    background-color: #121212;
+    box-shadow: 6px 10px 12px #000;
+    color: white;
+    font-size: clamp(10px, 2vw, 13px);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.button-icon {
+    width: clamp(30px, 10vw, 41px);
+    height: clamp(30px, 10vw, 41px);
+}
+
+.button-func:hover {
+    box-shadow: 4px 4px 8px #000;
+}
+
+.button-func:active {
+    box-shadow: inset 4px 4px 8px #000;
+}
+
+.main-info-container {
+    margin-top: 16px;
+    border: 5px solid #000;
+    border-radius: 20px;
+    width: clamp(300px, 90vw, 408px);
+    height: clamp(300px, 70vh, 440px);
+    justify-content: center;
+    overflow: hidden;
+    overflow-y: auto;
+
+}
+
+.import-token {
+    width: 100%;
+    height: clamp(30px, 10vh, 40px);
+    border-radius: 15px;
+    border: 5px solid #000;
+    cursor: pointer;
+    background-color: #121212;
+    color: white;
+    font-size: clamp(10px, 1.5vw, 13px);
+    font-weight: bold;
+}
+
+.import-token:active {
+    box-shadow: inset 4px 4px 8px #000;
+}
+
+.tokens-list {
+    margin: 5%;
+}
+
+.token {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+}
+
+.token-name {
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.token-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: right;
+}
+
+.token-cost {
+    font-weight: bold;
+    font-size: 10px;
+}
+
+.token-value {
+    margin: 0;
+    font-size: 10px;
+    color: #666;
+}
+
+.paralelButtons {
+    display: flex;
+}

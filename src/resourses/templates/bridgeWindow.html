@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebMetaWave</title>
+  <link rel="stylesheet" th:href="@{/style/Windows.css}">
+  <link rel="stylesheet" th:href="@{/style/BridgeWindow.css}">
+</head>
+<body>
+<div class="container">
+  <div class="head">
+    <div class="head-center-area">
+      <button class="back-btn">
+        <a th:href="@{/network/1}">
+          <img class="button-icon" th:src="@{/images/icons/fa-solid_arrow-up.svg}" alt="back">
+        </a>
+      </button>
+
+      <button class="transparent-button" th:onclick="|window.location.href='@{/profile}';|">
+        <h1 class="userNumber"
+            th:text="${userNumber.substring(0, 6)} + '...' + ${userNumber.substring(userNumber.length() - 4)}"></h1>
+      </button>
+    </div>
+  </div>
+
+  <form th:action="@{/bridge}" method="get">
+    <div class="main-info-container">
+      <div class="container-info">
+        <h2 class="text-value">From</h2>
+        <details class="dropdown">
+          <summary class="dropdown-btn">
+            <span th:text="${LabelNetworkFromName.substring(0, 7)} + '...'"></span>
+            <span class="arrow">▼</span>
+          </summary>
+          <ul class="dropdown-menu">
+            <li th:each="network : ${networks}">
+              <a th:href="@{/bridgeToken/networkFrom={fromId}/networkTo={toId}/token={tokenId}(
+                            fromId=${network.id},
+                            toId=${selectedNetworkToId},
+                            tokenId=${selectedTokenId})}"
+                 th:text="${network.name}">
+              </a>
+            </li>
+          </ul>
+        </details>
+
+        <h2 class="text-value">To</h2>
+        <details class="dropdown">
+          <summary class="dropdown-btn">
+            <span th:text="${LabelNetworkToName.substring(0, 7)} + '...'"></span>
+            <span class="arrow">▼</span>
+          </summary>
+          <ul class="dropdown-menu">
+            <li th:each="network : ${networks}">
+              <a th:href="@{/bridgeToken/networkFrom={fromId}/networkTo={toId}/token={tokenId}(
+                            fromId=${selectedNetworkFromId},
+                            toId=${network.id},
+                            tokenId=${selectedTokenId})}"
+                 th:text="${network.name}">
+              </a>
+            </li>
+          </ul>
+        </details>
+      </div>
+
+      <div class="container-info">
+        <h2 class="text-value">Token</h2>
+        <details class="dropdown">
+          <summary class="dropdown-btn">
+            <span th:text="${LabelTokenName}"></span>
+            <span class="arrow">▼</span>
+          </summary>
+          <ul class="dropdown-menu">
+            <li th:each="token : ${tokens}">
+              <a th:href="@{/bridgeToken/networkFrom={fromId}/networkTo={toId}/token={tokenId}(
+                            fromId=${selectedNetworkFromId},
+                            toId=${selectedNetworkToId},
+                            tokenId=${token.id})}"
+                 th:text="${token.tokenName}">
+              </a>
+            </li>
+          </ul>
+        </details>
+
+        <h2 class="balance-value" th:text="'Balance: ' + ${userTokenBalance}"></h2>
+        <input type="hidden" name="networkFromIdS" th:value="${selectedNetworkFromId}">
+        <input type="hidden" name="networkToIdS" th:value="${selectedNetworkToId}">
+        <input type="hidden" name="tokenIdS" th:value="${selectedTokenId}">
+        <input type="hidden" id="tokenValue" name="tokenValue" th:value="${tokenValue}">
+        <input type="hidden" id="ethTokenValue" name="ethTokenValue" th:value="${ethTokenValue}">
+        <input type="hidden" id="gas" name="gas" th:value="${bridgeGas}">
+        <input type="text" class="input-token-value" id="valueInput"
+               oninput="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+               name="valueS" placeholder="0">
+        <br>
+        <div style="text-align: center;">
+          Gas: <input style="font-size: 15px; width: 20%;" type="text" class="input-token-value" id="gasValue"
+                      value="0" readonly> ETH
+        </div>
+        <div style="text-align: center;" th:text="'Min Bridge Amount: ' + ${minBridge} + ' $ (' + ${minValueToken} + ' ' + ${symbolToken} + ')'">
+          Min Bridge Amount
+        </div>
+      </div>
+    </div>
+
+    <button class="button-func" type="submit">
+      <img class="button-icon" th:src="@{/images/icons/mingcute_bridge-line.svg}" alt="bridge">
+      Bridge
+    </button>
+
+    <div class="popup" th:if="${transactionDone}" style="border: 5px solid;">
+      <img class="correct-status" th:src="@{/images/icons/Vector.svg}" alt="">
+      <p>Transaction is done</p>
+      <a th:href="@{/bridgeToken}">Back</a>
+    </div>
+
+    <div class="popup" th:if="${transactionFail}" style="border: 5px solid;">
+      <img class="correct-status" th:src="@{/images/icons/Vector1.svg}" alt="">
+      <p>Transaction is fail</p>
+      <p th:text="${failText}"></p>
+      <a th:href="@{/bridgeToken}">Back</a>
+    </div>
+  </form>
+</div>
+</body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const valueInput = document.getElementById('valueInput');
+    const gasValue = document.getElementById('gasValue');
+    const gasRate = parseFloat(document.getElementById('gas').value);
+    const tokenRate = parseFloat(document.getElementById('tokenValue').value);
+    const ethRate = parseFloat(document.getElementById('ethTokenValue').value);
+
+    valueInput.addEventListener('input', function() {
+      const inputValue = parseFloat(this.value) || 0;
+      const tokenCost = inputValue * tokenRate;
+      const calculatedGas = tokenCost * (gasRate/100);
+      const result = calculatedGas / ethRate;
+      gasValue.value = result.toFixed(10);
+    });
+  });
+</script>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebMetaWave</title>
+  <link rel="stylesheet" th:href="@{/style/Windows.css}">
+  <link rel="stylesheet" th:href="@{/style/AddTokenWindow.css}">
+</head>
+<body>
+  <div class="container">
+    <div class="head">
+      <div class="head-center-area">
+        <button class="back-btn">
+          <a th:href="@{/network/1}">
+            <img class="button-icon" th:src="@{/images/icons/fa-solid_arrow-up.svg}" alt="back">
+          </a>
+        </button>
+        <button class="transparent-button" th:onclick="'window.location.href=' + '\'' + @{/profile} + '\''">
+          <h1 class="userNumber">
+            <span th:text="${#strings.substring(userNumber, 0, 6)}"></span>...
+            <span th:text="${#strings.substring(userNumber, userNumber.length() - 4)}"></span>
+          </h1>
+        </button>
+      </div>
+    </div>
+    <form th:action="@{'/' + ${currentNetworkId} + '/importToken'}" method="POST"
+          style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+
+    <div class="main-info-container">
+      <div class="container-info">
+        <h1 class="text-value">Enter token UCID</h1>
+        <input type="text" class="wallet-number-input" name="code" placeholder="" th:value="${idInput}">
+      </div>
+    </div>
+    <div th:if="${codeError != null}">
+      <p class="error-message">Token already exists in your network!</p>
+    </div>
+    <div th:if="${codeErrorExist != null}">
+      <p class="error-message">Token with this code isn’t exist!</p>
+    </div>
+    <button type="submit" class="button-func">Add Token</button>
+    </form>
+
+  </div>
+</body>
+</html>

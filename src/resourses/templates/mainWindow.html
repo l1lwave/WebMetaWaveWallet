@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebMetaWave</title>
+    <link rel="stylesheet" th:href="@{/style/Windows.css}">
+    <link rel="stylesheet" th:href="@{/style/mainWindow.css}">
+</head>
+<body>
+<div class="container">
+    <div class="head">
+        <div class="head-center-area">
+            <details class="dropdown">
+                <summary class="dropdown-btn">
+                    <span th:text="${LabelNetworkName.substring(0, 5)} + '...'"></span>
+                    <span class="arrow">▼</span>
+                </summary>
+                <ul class="dropdown-menu">
+                    <li th:each="network : ${networks}">
+                        <a th:href="@{/network/{id}(id=${network.id})}" th:text="${network.name}"></a>
+                    </li>
+                </ul>
+            </details>
+
+
+            <button class="transparent-button" th:onclick="|window.location.href='@{/profile}';|">
+                <h1 class="userNumber" th:text="${userNumber.substring(0, 6)} + '...' + ${userNumber.substring(userNumber.length() - 4)}"></h1>
+            </button>
+        </div>
+    </div>
+
+    <div class="balance">
+        $<span th:text="${#numbers.formatDecimal(userBalance, 2, 2)}"></span> USD
+    </div>
+
+    <div class="buttons-function">
+        <button class="button-func" th:onclick="|window.location.href='@{/swapToken}';|">
+            <img class="button-icon" th:src="@{/images/icons/eva_swap-fill.svg}">
+            Swap
+        </button>
+        <button class="button-func" th:onclick="|window.location.href='@{/bridgeToken}';|">
+            <img class="button-icon" th:src="@{/images/icons/mingcute_bridge-line.svg}">
+            Bridge
+        </button>
+        <button class="button-func" th:onclick="|window.location.href='@{/sendToken}';|">
+            <img class="button-icon" th:src="@{/images/icons/mingcute_send-line.svg}">
+            Send
+        </button>
+    </div>
+
+    <div class="main-info-container">
+        <button class="import-token"
+                th:onclick="|window.location.href='@{/{networkId}/importToken(networkId=${currentNetworkId})}';|">
+            + Import token
+        </button>
+
+        <div class="tokens-list">
+            <div class="token" th:each="balance : ${balances}">
+                <span class="token-name" th:text="${balance.metaToken.tokenName}"></span>
+                <div>
+                    <span class="token-cost">
+                        $<span th:text="${#numbers.formatDecimal(balance.balance * balance.metaToken.tokenValue, 2, 2)}"></span> USD
+                    </span>
+                    <br>
+                    <span class="token-value" th:text="${balance.balance} + ' ' + ${balance.metaToken.tokenSymbol}"></span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

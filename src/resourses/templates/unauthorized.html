@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebMetaWave</title>
+  <link rel="stylesheet" th:href="@{/style/Windows.css}">
+  <link rel="stylesheet" th:href="@{/style/IndexWindow.css}">
+</head>
+<body>
+<div class="container">
+  <h1 class="LableText" th:text="'Access denied for ' + ${email} + '!'">
+    Access denied for [email]!
+  </h1>
+
+  <button class="button-func" th:onclick="|window.location.href='@{/logout}';|">
+    <img class="button-icon" th:src="@{/images/icons/tabler_logout.svg}" alt="logout">
+    Logout
+  </button>
+</div>
+</body>
+</html>

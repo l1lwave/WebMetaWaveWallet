@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebMetaWave</title>
+  <link rel="stylesheet" th:href="@{/style/Windows.css}">
+  <link rel="stylesheet" th:href="@{/style/ProfileWindow.css}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="head">
+    <div class="head-center-area">
+      <button class="back-btn" th:onclick="|window.location.href='@{/profile}';|">
+        <img class="button-icon" th:src="@{/images/icons/fa-solid_arrow-up.svg}" alt="back">
+      </button>
+
+      <h1 class="userNumber">All Users</h1>
+    </div>
+  </div>
+
+  <div class="buttons-function">
+    <div>
+      <button class="button-func" id="ban_users">
+        <img class="button-icon" th:src="@{/images/icons/lucide_shield-ban.svg}" alt="ban">
+        Ban Users
+      </button>
+      <button class="button-func" id="unban_users">
+        <img class="button-icon" th:src="@{/images/icons/lucide_shield-ban.svg}" alt="unban">
+        UnBan Users
+      </button>
+    </div>
+    <br>
+    <div>
+      <button class="button-func" id="admin_users">
+        <img class="button-icon" th:src="@{/images/icons/dashicons_admin-network.svg}" alt="admin">
+        Give Admin Role
+      </button>
+      <button class="button-func" id="unadmin_users">
+        <img class="button-icon" th:src="@{/images/icons/dashicons_admin-network.svg}" alt="admin">
+        Get Admin Role
+      </button>
+    </div>
+  </div>
+
+  <div class="main-info-container">
+    <div class="paralelButtons">
+      <button class="import-token" th:onclick="|window.location.href='@{/profile/allUsers/users}';|">
+        Users
+      </button>
+      <button class="import-token" th:onclick="|window.location.href='@{/profile/allUsers/banned}';|">
+        Banned Users
+      </button>
+      <button class="import-token" th:onclick="|window.location.href='@{/profile/allUsers/admins}';|">
+        Admins
+      </button>
+    </div>
+
+    <div class="tokens-list">
+      <div class="token" th:each="user : ${users}">
+        <input type="checkbox" name="toChangeRole[]" th:value="${user.id}" th:id="'checkbox_' + ${user.id}" />
+        <span class="token-name" th:text="${user.email}"></span>
+        <div>
+                    <span class="token-cost"
+                          th:text="${user.walletNumber.substring(0, 4)} + '...' + ${user.walletNumber.substring(user.walletNumber.length() - 4)}">
+                    </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
+<script>
+  function sendPostRequest(buttonId, url) {
+    $(buttonId).click(function () {
+      let data = { 'toChangeRole[]': [] };
+      $(":checked").each(function () {
+        data['toChangeRole[]'].push($(this).val());
+      });
+      $.post(url, data, function (data, status) {
+        window.location.reload();
+      });
+    });
+  }
+
+  sendPostRequest('#ban_users', '/users/banned');
+  sendPostRequest('#unban_users', '/users/unbanned');
+  sendPostRequest('#admin_users', '/users/giveAdmin');
+  sendPostRequest('#unadmin_users', '/users/getAdmin');
+</script>
+
+</html>

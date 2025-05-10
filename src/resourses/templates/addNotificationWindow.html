@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebMetaWave</title>
+  <link rel="stylesheet" th:href="@{/style/Windows.css}">
+  <link rel="stylesheet" th:href="@{/style/NewsWindow.css}">
+</head>
+<body>
+<div class="container">
+  <div class="head">
+    <div class="head-center-area">
+      <button class="back-btn" th:onclick="|window.location.href='@{/notifications}';|">
+        <img class="button-icon" th:src="@{/images/icons/fa-solid_arrow-up.svg}" alt="back">
+      </button>
+
+      <h1 class="userNumber">News</h1>
+    </div>
+  </div>
+
+  <form th:action="@{/addNewNotification}" method="POST">
+    <div class="main-info-container">
+      <input type="text" class="input-title" name="title" placeholder="Title">
+      <textarea type="text" class="input-content" name="content" placeholder="Content"></textarea>
+      <button type="submit" class="button-func">Add</button>
+    </div>
+  </form>
+
+</div>
+</body>
+</html>

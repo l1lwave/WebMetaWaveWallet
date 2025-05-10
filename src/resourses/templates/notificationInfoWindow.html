@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebMetaWave</title>
+    <link rel="stylesheet" th:href="@{/style/Windows.css}">
+    <link rel="stylesheet" th:href="@{/style/NewsWindow.css}">
+</head>
+<body>
+<div class="container">
+    <div class="head">
+        <div class="head-center-area">
+            <button type="button" class="back-btn" th:onclick="|window.location.href='@{/notifications}';|">
+                <img class="button-icon" th:src="@{/images/icons/fa-solid_arrow-up.svg}" alt="Back">
+            </button>
+
+            <h1 class="userNumber">News</h1>
+        </div>
+    </div>
+
+    <div class="main-info-container">
+        <div class="new-info">
+            <div class="title-new" th:text="${notificationTitle}"></div>
+            <div th:text="${notificationDate}"></div>
+            <div class="content-new" th:text="${notificationContent}"></div>
+        </div>
+    </div>
+
+    <button type="button" class="button-func" th:if="${isAdmin}" th:onclick="|window.location.href='@{/deleteNotification={notificationId}(notificationId=${notificationId})}';|">
+        Delete New
+    </button>
+</div>
+</body>
+</html>

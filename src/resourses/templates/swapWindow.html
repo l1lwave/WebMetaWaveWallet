@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebMetaWave</title>
+  <link rel="stylesheet" th:href="@{/style/Windows.css}">
+  <link rel="stylesheet" th:href="@{/style/SwapWindow.css}">
+</head>
+<body>
+<div class="container">
+  <div class="head">
+    <div class="head-center-area">
+      <button class="back-btn">
+        <a th:href="@{/network/1}">
+          <img class="button-icon" th:src="@{/images/icons/fa-solid_arrow-up.svg}" alt="back">
+        </a>
+      </button>
+
+      <button class="transparent-button" th:onclick="|window.location.href='@{/profile}';|">
+        <h1 class="userNumber"
+            th:text="${userNumber.substring(0, 6)} + '...' + ${userNumber.substring(userNumber.length() - 4)}"></h1>
+      </button>
+    </div>
+  </div>
+
+  <details class="dropdown">
+    <summary class="dropdown-btn">
+      <span th:text="${LabelNetworkName.substring(0, 7)} + '...'"></span>
+      <span class="arrow">▼</span>
+    </summary>
+    <ul class="dropdown-menu">
+      <li th:each="network : ${networks}">
+        <a th:href="@{/swapToken/network={id}(id=${network.id})}" th:text="${network.name}"></a>
+      </li>
+    </ul>
+  </details>
+
+  <form th:action="@{/swap}" method="get">
+
+    <div class="main-info-container">
+      <div class="container-info">
+        <details class="dropdown">
+          <summary class="dropdown-btn">
+            <span th:text="${LabelTokenFromName}"></span>
+            <span class="arrow">▼</span>
+          </summary>
+          <ul class="dropdown-menu">
+            <li th:each="token : ${tokens}">
+              <a th:href="@{/swapToken/network={networkId}/tokenFrom={fromId}/tokenTo={toId}(
+                                networkId=${selectedNetworkId},
+                                fromId=${token.id},
+                                toId=${selectedTokenToId})}"
+                 th:text="${token.tokenName}">
+              </a>
+            </li>
+          </ul>
+        </details>
+
+        <h2 class="balance-value" th:text="'Balance: ' + ${userTokenBalance}"></h2>
+
+        <input type="hidden" name="networkIdS" th:value="${selectedNetworkId}">
+        <input type="hidden" name="tokenFromIdS" th:value="${selectedTokenFromId}">
+        <input type="hidden" name="tokenToIdS" th:value="${selectedTokenToId}">
+        <input type="hidden" id="tokenValue" name="tokenFromValue" th:value="${tokenFromValue}">
+        <input type="hidden" id="ethTokenValue" name="ethTokenValue" th:value="${ethTokenValue}">
+        <input type="hidden" id="gas" name="gas" th:value="${swapGas}">
+        <input type="hidden" id="coef" name="coef" th:value="${coef}">
+
+        <input type="text" class="input-token-value" id="valueInput"
+               oninput="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+               name="valueS" placeholder="0">
+      </div>
+
+      <div class="container-info">
+        <details class="dropdown">
+          <summary class="dropdown-btn">
+            <span th:text="${LabelTokenToName}"></span>
+            <span class="arrow">▼</span>
+          </summary>
+          <ul class="dropdown-menu">
+            <li th:each="token : ${tokens}">
+              <a th:href="@{/swapToken/network={networkId}/tokenFrom={fromId}/tokenTo={toId}(
+                                networkId=${selectedNetworkId},
+                                fromId=${selectedTokenFromId},
+                                toId=${token.id})}"
+                 th:text="${token.tokenName}">
+              </a>
+            </li>
+          </ul>
+        </details>
+
+        <input type="text" class="input-token-value" id="convertedValue" value="0" readonly>
+        <br>
+        <div>
+          Gas: <input style="font-size: 15px; width: 20%;" type="text"
+                      class="input-token-value" id="gasValue" value="0" readonly> ETH
+        </div>
+      </div>
+
+      <button class="button-func" type="submit">
+        <img class="button-icon" th:src="@{/images/icons/eva_swap-fill.svg}" alt="swap">
+        Swap
+      </button>
+
+      <div class="popup" th:if="${transactionDone}"
+           style="border: 5px solid;">
+        <img class="correct-status" th:src="@{/images/icons/Vector.svg}" alt="">
+        <p>Transaction is done</p>
+        <a th:href="@{/swapToken}">Back</a>
+      </div>
+
+      <div class="popup" th:if="${transactionFail}"
+           style="border: 5px solid;">
+        <img class="correct-status" th:src="@{/images/icons/Vector1.svg}" alt="">
+        <p>Transaction is fail</p>
+        <p th:text="${failText}"></p>
+        <a th:href="@{/swapToken}">Back</a>
+      </div>
+    </div>
+  </form>
+</div>
+</body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const valueInput = document.getElementById('valueInput');
+
+    const gasValue = document.getElementById('gasValue');
+
+    const gasRate = parseFloat(document.getElementById('gas').value);
+    const tokenRate = parseFloat(document.getElementById('tokenValue').value);
+    const ethRate = parseFloat(document.getElementById('ethTokenValue').value);
+
+    const convertedValue = document.getElementById('convertedValue');
+    const coef = parseFloat(document.getElementById('coef').value);
+
+    valueInput.addEventListener('input', function() {
+      const inputValue = parseFloat(this.value) || 0;
+      const tokenCost = inputValue * tokenRate;
+      const calculatedGas = tokenCost * (gasRate/100);
+      const result = calculatedGas / ethRate;
+
+      gasValue.value = result.toFixed(10);
+    });
+
+    valueInput.addEventListener('input', function() {
+      const inputValue = parseFloat(this.value) || 0;
+      const calculatedCoef = inputValue * coef;
+
+      convertedValue.value = calculatedCoef.toFixed(6);
+    });
+  });
+</script>
+
+</html>
