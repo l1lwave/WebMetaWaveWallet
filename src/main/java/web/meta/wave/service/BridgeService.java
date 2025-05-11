@@ -45,27 +45,29 @@ public class BridgeService {
 
         Optional<Network> networkFrom = networkService.findById(networkFromId);
         Optional<Network> networkTo = networkService.findById(networkToId);
-        Optional<MetaToken> token = tokenService.findByTokenId(tokenId);
+        Optional<MetaToken> tokenOp = tokenService.findByTokenId(tokenId);
 
 
-        if (networkFrom.isEmpty() || networkTo.isEmpty() || token.isEmpty()) {
+        if (networkFrom.isEmpty() || networkTo.isEmpty() || tokenOp.isEmpty()) {
             return bridgeStatements.getParametersError();
         }
 
-        BigDecimal minBridgeValue = BigDecimal.valueOf(bridgeStatements.getMIN_BRIDGE_AMOUNT()).divide(token.get().getTokenValue(), 6, RoundingMode.HALF_UP);
+        MetaToken token = tokenOp.get();
+
+        BigDecimal minBridgeValue = BigDecimal.valueOf(bridgeStatements.getMIN_BRIDGE_AMOUNT()).divide(token.getTokenValue(), 6, RoundingMode.HALF_UP);
 
         if (value.compareTo(minBridgeValue) < 0) {
-            transactionService.addTransaction(customUser, customUser, token.get(), token.get(), value, value, Status.FAILED);
+            transactionService.addTransaction(customUser, customUser, token, token, value, value, Status.FAILED);
             return bridgeStatements.getMinBridgeError();
         }
 
         MetaToken ethToken = walletService.getEthToken();
         BigDecimal ethValue = ethToken.getTokenValue();
 
-        BigDecimal bridgeGas = walletService.countGas(gas.getBridgeGas(), ethToken, value, ethValue);
+        BigDecimal bridgeGas = walletService.countGas(gas.getBridgeGas(), token, value, ethValue);
 
-        Optional<Balance> balanceFrom = balanceService.getBalanceByNetworkAndMetaTokenAndCustomUser(networkFrom.get(), token.get(), customUser);
-        Optional<Balance> balanceTo = balanceService.getBalanceByNetworkAndMetaTokenAndCustomUser(networkTo.get(), token.get(), customUser);
+        Optional<Balance> balanceFrom = balanceService.getBalanceByNetworkAndMetaTokenAndCustomUser(networkFrom.get(), token, customUser);
+        Optional<Balance> balanceTo = balanceService.getBalanceByNetworkAndMetaTokenAndCustomUser(networkTo.get(), token, customUser);
 
         if (balanceFrom.isEmpty()) {
             return bridgeStatements.getError();
@@ -74,33 +76,33 @@ public class BridgeService {
         BigDecimal tempBalanceFrom = balanceFrom.get().getBalance();
 
         if (tempBalanceFrom.compareTo(value) < 0) {
-            transactionService.addTransaction(customUser, customUser, token.get(), token.get(), value, value, Status.FAILED);
+            transactionService.addTransaction(customUser, customUser, token, token, value, value, Status.FAILED);
             return bridgeStatements.getNotEnouthFundsError();
         }
 
         if (walletService.doGas(networkFrom.get(), ethToken, customUser, gasUser, bridgeGas)) {
-            transactionService.addTransaction(customUser, customUser, token.get(), token.get(), value, value, Status.FAILED);
+            transactionService.addTransaction(customUser, customUser, token, token, value, value, Status.FAILED);
             return bridgeStatements.getNotEnouthGas();
         }
 
         tempBalanceFrom = balanceFrom.get().getBalance();
 
         if (tempBalanceFrom.compareTo(value) < 0) {
-            transactionService.addTransaction(customUser, customUser, token.get(), token.get(), value, value, Status.FAILED);
+            transactionService.addTransaction(customUser, customUser, token, token, value, value, Status.FAILED);
             return bridgeStatements.getNotEnouthFundsError();
         }
 
-        balanceService.updateBalance(networkFrom.get(), token.get(), customUser, tempBalanceFrom.subtract(value));
+        balanceService.updateBalance(networkFrom.get(), token, customUser, tempBalanceFrom.subtract(value));
 
         if(balanceTo.isPresent()) {
             BigDecimal tempBalanceTo = balanceTo.get().getBalance();
-            balanceService.updateBalance(networkTo.get(), token.get(), customUser, tempBalanceTo.add(value));
-            transactionService.addTransaction(customUser, customUser, token.get(), token.get(), value, value, Status.CORRECT);
+            balanceService.updateBalance(networkTo.get(), token, customUser, tempBalanceTo.add(value));
+            transactionService.addTransaction(customUser, customUser, token, token, value, value, Status.CORRECT);
             return bridgeStatements.getNoError();
         }
 
-        balanceService.addBalance(networkTo.get(), token.get(), customUser, value);
-        transactionService.addTransaction(customUser, customUser, token.get(), token.get(), value, value, Status.CORRECT);
+        balanceService.addBalance(networkTo.get(), token, customUser, value);
+        transactionService.addTransaction(customUser, customUser, token, token, value, value, Status.CORRECT);
         return bridgeStatements.getNoError();
     }
 }
