@@ -1,0 +1,274 @@
+/* SendWindow.css */
+:root {
+    --bg-color: #121212;
+    --card-bg: #1a1a1a;
+    --accent-color: #ffffff;
+    --border-color: #2a2a2a; /* Сделаем границы чуть мягче */
+    --text-secondary: #a0a0a0;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.container {
+    color: var(--accent-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 40px;
+}
+
+.head {
+    width: 100%;
+    height: 80px;
+    background: rgba(18, 18, 18, 0.8);
+    backdrop-filter: blur(10px); /* Эффект стекла */
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.head-center-area {
+    width: 100%;
+    max-width: 450px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.back-btn{
+    max-width: 130px;
+    height: clamp(50px, 10vh, 65px);
+    padding: 0 10px;
+    border: none;
+    cursor: pointer;
+    background-color: #121212;
+    display: flex;
+    align-items: center;
+}
+
+.back-btn img{
+    width: 30px;
+}
+
+.transparent-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.userNumber {
+    background: linear-gradient(90deg, #fff, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.main-info-container {
+    width: 100%;
+    max-width: 420px;
+    margin-top: 30px;
+}
+
+.container-info {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.text-value {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.wallet-number-input {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 14px;
+    padding: 15px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.container-info-second {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 24px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.text-value-second {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.input-token-value {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #333;
+    font-size: 28px;
+    color: white;
+    width: 100%;
+    padding: 10px 0;
+    outline: none;
+}
+
+.button-func {
+    width: 100%; /* Растягиваем на всю ширину формы */
+    height: 65px; /* Увеличиваем высоту для солидности */
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 18px;
+    font-size: 20px; /* Крупный текст */
+    font-weight: 800; /* Жирный шрифт */
+    text-transform: uppercase; /* Все заглавные */
+    letter-spacing: 1px;
+    margin-top: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.button-func:hover {
+    transform: translateY(-2px);
+    background: #f0f0f0;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+}
+
+.button-func:active {
+    transform: scale(0.98);
+}
+
+.button-icon-low {
+    width: 24px;
+    height: 24px;
+    filter: invert(1);
+}
+
+/* --- Стилизация выпадающего списка (Dropdown) --- */
+
+/* Контейнер */
+.dropdown {
+    position: relative;
+    width: 100%;
+    max-width: 380px; /* Ограничиваем ширину для красоты */
+    margin: 10px 0;
+    user-select: none;
+}
+
+/* Кнопка выпадающего списка */
+.dropdown-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #252525; /* Темно-серый фон, выделяющийся на фоне карточки */
+    border: 1px solid #333;
+    padding: 12px 20px;
+    border-radius: 14px;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    list-style: none; /* Убираем стандартный маркер details */
+}
+
+/* Убираем стандартную стрелку в Chrome/Safari */
+.dropdown-btn::-webkit-details-marker {
+    display: none;
+}
+
+/* Кастомная стрелка (через псевдоэлемент) */
+.dropdown-btn::after {
+    content: '▼';
+    font-size: 10px;
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+    color: #888;
+}
+
+/* Поворот стрелки при открытии */
+.dropdown[open] .dropdown-btn::after {
+    transform: rotate(180deg);
+}
+
+.dropdown-btn:hover {
+    background: #2a2a2a;
+    border-color: #444;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Меню со списком */
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px); /* Небольшой отступ от кнопки */
+    left: 0;
+    width: 100%;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    padding: 8px;
+    list-style: none;
+    margin: 0;
+    z-index: 1000;
+    overflow: hidden;
+    animation: dropdownFadeIn 0.2s ease-out; /* Плавное появление */
+}
+
+/* Эффект появления */
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Элементы списка */
+.dropdown-menu li {
+    margin-bottom: 2px;
+}
+
+.dropdown-menu li:last-child {
+    margin-bottom: 0;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 12px 16px;
+    color: #cccccc;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+/* Hover-эффект для ссылок в списке */
+.dropdown-menu li a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    padding-left: 20px; /* Небольшой сдвиг вправо при наведении */
+}
+
+/* Активное состояние (если нужно выделить текущий выбор) */
+.dropdown-menu li a:active {
+    background: rgba(255, 255, 255, 0.1);
+}

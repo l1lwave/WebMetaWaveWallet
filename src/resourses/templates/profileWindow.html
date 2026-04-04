@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebMetaWave</title>
+  <link rel="stylesheet" th:href="@{/style/Windows.css}">
+  <link rel="stylesheet" th:href="@{/style/ProfileWindow.css}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+  <div class="head">
+    <div class="head-center-area">
+      <button class="back-btn">
+        <a th:href="@{/network/1}">
+          <img class="button-icon" th:src="@{/images/icons/fa-solid_arrow-up.svg}" alt="back">
+        </a>
+      </button>
+
+      <button class="back-btn">
+        <a th:href="@{/notifications}">
+          <img class="button-icon" th:src="@{/images/icons/tabler_bell-filled.svg}" alt="news">
+        </a>
+      </button>
+    </div>
+  </div>
+
+  <h1 class="accountText">Account</h1>
+  <div class="userNumber" th:text="${userNumber}"></div>
+
+  <div class="buttons-function">
+    <button class="button-func" th:if="${isAdmin}" th:onclick="|window.location.href='@{/profile/allTxns}';|">
+      <img class="button-icon" th:src="@{/images/icons/icon-park-outline_transaction-order.svg}" alt="txns">
+      Txns
+    </button>
+    <button class="button-func" th:if="${isAdmin}" th:onclick="|window.location.href='@{/profile/allUsers/users}';|">
+      <img class="button-icon" th:src="@{/images/icons/mdi_users-outline.svg}" alt="users">
+      Users
+    </button>
+    <button class="button-func" th:onclick="|window.location.href='@{/logout}';|">
+      <img class="button-icon" th:src="@{/images/icons/tabler_logout.svg}" alt="logout">
+      Logout
+    </button>
+  </div>
+
+  <div class="main-info-container">
+    <div class="paralelButtons">
+      <button class="import-token" th:onclick="|window.location.href='@{/profile/sentTxns}';|">Sent</button>
+      <button class="import-token" th:onclick="|window.location.href='@{/profile/receivedTxns}';|">Received</button>
+    </div>
+
+    <div class="tokens-list">
+      <div class="token">
+        <span class="token-name">Token</span>
+        <div><span class="token-cost">Amount</span></div>
+        <div><span class="token-cost">Date</span></div>
+        <div><span class="token-cost">Status</span></div>
+      </div>
+
+      <div class="token" th:each="txn : ${txns}">
+        <span class="token-name" th:if="${sendler}" th:text="${txn.tokenFrom.tokenSymbol}"></span>
+        <span class="token-name" th:if="${receiver}" th:text="${txn.tokenTo.tokenSymbol}"></span>
+        <div th:if="${sendler}">
+          <span class="token-cost" th:text="${symbol} + ${txn.amountFrom}"></span>
+        </div>
+        <div th:if="${receiver}">
+          <span class="token-cost" th:text="${symbol} + ${txn.amountTo}"></span>
+        </div>
+        <div>
+          <span class="token-cost" th:text="${txn.date}"></span>
+        </div>
+        <div>
+          <span class="token-cost" th:text="${txn.status}"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+
+<script>
+  $(document).ready(function() {
+    $('.userNumber').click(function() {
+      const text = $(this).text();
+      const tempInput = $('<input>');
+      $('body').append(tempInput);
+      tempInput.val(text).select();
+      document.execCommand('copy');
+      tempInput.remove();
+
+      alert("Copied: " + text);
+    });
+  });
+</script>
+
+</html>

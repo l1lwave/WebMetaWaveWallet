@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy Crypto - WebMetaWave</title>
+  <link rel="stylesheet" th:href="@{/style/Windows.css}">
+  <link rel="stylesheet" th:href="@{/style/SwapWindow.css}">
+</head>
+<body>
+<div class="container">
+  <div class="head">
+    <div class="head-center-area">
+      <button class="back-btn">
+        <a th:href="@{/network/1}">
+          <img class="button-icon" th:src="@{/images/icons/fa-solid_arrow-up.svg}" alt="back">
+        </a>
+      </button>
+
+      <button class="transparent-button" th:onclick="|window.location.href='@{/profile}';|">
+        <h1 class="userNumber"
+            th:text="${userNumber.substring(0, 6)} + '...' + ${userNumber.substring(userNumber.length() - 4)}"></h1>
+      </button>
+    </div>
+  </div>
+
+  <details class="dropdown">
+    <summary class="dropdown-btn">
+      <span th:text="${LabelNetworkName.substring(0, 7)} + '...'"></span>
+    </summary>
+    <ul class="dropdown-menu">
+      <li th:each="network : ${networks}">
+        <a th:href="@{/buyToken/network={id}(id=${network.id})}" th:text="${network.name}"></a>
+      </li>
+    </ul>
+  </details>
+
+  <form th:action="@{/buy}" method="get">
+    <div class="main-info-container">
+      <div class="container-info">
+        <details class="dropdown">
+          <summary class="dropdown-btn">
+            <span th:text="${LabelTokenName}"></span>
+          </summary>
+          <ul class="dropdown-menu">
+            <li th:each="token : ${tokens}">
+              <a th:href="@{/buyToken/network={networkId}/token={tokenId}(networkId=${selectedNetworkId}, tokenId=${token.id})}"
+                 th:text="${token.tokenName}">
+              </a>
+            </li>
+          </ul>
+        </details>
+
+        <input type="hidden" name="networkIdS" th:value="${selectedNetworkId}">
+        <input type="hidden" name="tokenIdS" th:value="${selectedTokenId}">
+        <input type="hidden" id="tokenPriceUsd" th:value="${tokenPriceUsd}">
+
+        <input type="text" class="input-token-value" id="amountUsdInput"
+               oninput="this.value=this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+               name="amountUsdS" placeholder="Amount in USD">
+      </div>
+
+      <div class="container-info">
+        <div>Crypto amount: <input type="text" class="input-token-value" id="cryptoAmountView" readonly></div>
+      </div>
+
+      <button class="button-func" type="submit">
+        <img class="button-icon-low" th:src="@{/images/icons/zondicons_add-outline.svg}" alt="buy">
+        Buy
+      </button>
+
+      <div class="popup" th:if="${transactionDone}" style="border: 5px solid;">
+        <img class="correct-status" th:src="@{/images/icons/Vector.svg}" alt="">
+        <p>Crypto purchase completed</p>
+        <a th:href="@{/buyToken}">Back</a>
+      </div>
+
+      <div class="popup" th:if="${transactionFail}" style="border: 5px solid;">
+        <img class="correct-status" th:src="@{/images/icons/Vector1.svg}" alt="">
+        <p>Crypto purchase failed</p>
+        <p th:text="${failText}"></p>
+        <a th:href="@{/buyToken}">Back</a>
+      </div>
+    </div>
+  </form>
+</div>
+</body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const amountUsdInput = document.getElementById('amountUsdInput');
+    const tokenPriceUsd = parseFloat(document.getElementById('tokenPriceUsd').value) || 0;
+    const cryptoAmountView = document.getElementById('cryptoAmountView');
+
+    amountUsdInput.addEventListener('input', function() {
+      const amountUsd = parseFloat(this.value) || 0;
+      const cryptoAmount = tokenPriceUsd > 0 ? amountUsd / tokenPriceUsd : 0;
+      cryptoAmountView.value = cryptoAmount.toFixed(8);
+    });
+  });
+</script>
+
+</html>

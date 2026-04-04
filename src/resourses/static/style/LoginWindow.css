@@ -1,0 +1,97 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.LableText {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+}
+
+#email, #password, #passwordCheck, #code{
+    width: 100%;
+    max-width: 350px;
+    height: 55px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: white;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    padding: 0 20px;
+    border-radius: 12px;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+#email:focus, #password:focus {
+    border-color: #ffffff;
+    background: #252525;
+    outline: none;
+}
+
+.neumorphic-button {
+    width: 100%;
+    max-width: 350px;
+    height: 55px;
+    margin-top: 20px;
+    background: #ffffff;
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.neumorphic-button:hover {
+    background: #e0e0e0;
+}
+
+.register {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.register:hover {
+    color: #fff;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #1a1a1a;
+    border: 1px solid #ff4d4d;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    border-radius: 20px;
+    padding: 30px;
+    width: 320px;
+    text-align: center;
+    z-index: 10000;
+}
+
+.popup p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 10px 0;
+}
+
+.popup a {
+    display: inline-block;
+    margin-top: 15px;
+    color: #ff4d4d;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 12px;
+}

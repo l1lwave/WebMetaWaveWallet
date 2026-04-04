@@ -1,0 +1,235 @@
+:root {
+    --bg-color: #121212;
+    --card-bg: #1a1a1a;
+    --accent-color: #ffffff;
+    --border-color: #2a2a2a; /* Сделаем границы чуть мягче */
+    --text-secondary: #a0a0a0;
+    --shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+body {
+    background-color: var(--bg-color);
+    margin: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container {
+    color: var(--accent-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 40px;
+}
+
+/* --- HEADER --- */
+.head {
+    width: 100%;
+    height: 80px;
+    background: rgba(18, 18, 18, 0.8);
+    backdrop-filter: blur(10px); /* Эффект стекла */
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.head-center-area {
+    width: 100%;
+    max-width: 450px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* --- DROPDOWN (NETWORK SELECTOR) --- */
+.dropdown {
+    position: relative;
+}
+
+.dropdown-btn {
+    display: flex;
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.dropdown-btn:hover {
+    background: #252525;
+    border-color: #444;
+}
+
+.dropdown-btn .arrow {
+    font-size: 10px;
+    margin-left: 8px;
+    opacity: 0.6;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    background: #1e1e1e;
+    border-radius: 14px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    padding: 8px;
+    list-style: none;
+    width: 180px;
+    z-index: 1000;
+}
+
+.dropdown-menu li a {
+    color: white;
+    padding: 10px 12px;
+    display: block;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.dropdown-menu li a:hover {
+    background: #333;
+}
+
+/* --- USER ADDRESS --- */
+.transparent-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.userNumber {
+    background: linear-gradient(90deg, #fff, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* --- BALANCE --- */
+.balance {
+    font-size: clamp(24px, 10vw, 42px);
+    font-weight: 700;
+    margin-top: 50px;
+    letter-spacing: -1px;
+}
+
+/* --- ACTION BUTTONS --- */
+.buttons-function {
+    display: flex;
+    gap: 15px;
+    margin-top: 40px;
+}
+
+.button-func {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 12px 20px;
+    color: white;
+    display: flex;
+    flex-direction: column; /* Иконка над текстом выглядит профессиональнее */
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 80px;
+}
+
+.button-func:hover {
+    transform: translateY(-3px);
+    background: #252525;
+    border-color: #555;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.button-icon {
+    width: 28px;
+    height: 28px;
+    filter: brightness(1.2);
+}
+
+/* --- MAIN LIST CONTAINER --- */
+.main-info-container {
+    margin-top: 40px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    width: 100%;
+    max-width: 420px;
+    min-height: 400px;
+    box-shadow: var(--shadow);
+}
+
+.import-token {
+    width: 100%;
+    padding: 15px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    color: #888;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.import-token:hover {
+    color: white;
+    background: rgba(255,255,255,0.02);
+}
+
+/* --- TOKEN LIST --- */
+.tokens-list {
+    padding: 10px 20px;
+}
+
+.token {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.token:last-child {
+    border-bottom: none;
+}
+
+.token-name {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.token-cost {
+    font-weight: 600;
+    font-size: 16px;
+    display: block;
+    text-align: right;
+}
+
+.token-value {
+    color: var(--text-secondary);
+    font-size: 13px;
+    display: block;
+    text-align: right;
+    margin-top: 4px;
+}
+
+/* Скроллбар в стиле темной темы */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}

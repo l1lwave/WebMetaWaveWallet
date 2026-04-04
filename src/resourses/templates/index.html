@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ua" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebMetaWave</title>
+    <link rel="stylesheet" th:href="@{/style/Windows.css}">
+    <link rel="stylesheet" th:href="@{/style/IndexWindow.css}">
+</head>
+<body>
+<div class="container">
+    <h1 class="LableText">
+        Welcome <br>
+        <span class="indent">to</span> <br>
+        WebMetaWave
+    </h1>
+
+    <button class="neumorphic-button" th:onclick="|window.location.href='@{/main}';|">JOIN</button>
+</div>
+</body>
+</html>
