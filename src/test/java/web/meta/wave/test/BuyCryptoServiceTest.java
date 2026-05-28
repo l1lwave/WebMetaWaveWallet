@@ -43,7 +43,7 @@ public class BuyCryptoServiceTest {
 
         token = new MetaToken();
         token.setId(1L);
-        token.setTokenValue(BigDecimal.valueOf(40.0)); // Цена токена $40
+        token.setTokenValue(BigDecimal.valueOf(40.0));
 
         balance = new Balance(network, token, user, BigDecimal.valueOf(5.0));
     }
@@ -107,7 +107,6 @@ public class BuyCryptoServiceTest {
         when(tokenService.findByTokenId(1L)).thenReturn(Optional.of(token));
         when(balanceService.getBalanceByNetworkAndMetaTokenAndCustomUser(network, token, user)).thenReturn(Optional.of(balance));
 
-        // Симулируем ошибку при попытке обновить баланс
         doThrow(new RuntimeException("DB Error")).when(balanceService).updateBalance(any(), any(), any(), any());
 
         String result = buyCryptoService.buyCrypto("100", "1", "1", user);
