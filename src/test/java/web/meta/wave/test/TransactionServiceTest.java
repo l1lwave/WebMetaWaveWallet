@@ -42,7 +42,6 @@ public class TransactionServiceTest {
 
         transactionService.addTransaction(userFrom, userTo, tokenFrom, tokenTo, amountFrom, amountTo, Status.CORRECT);
 
-        // Проверяем, что объект транзакции был успешно передан в репозиторий на сохранение
         verify(transactionRepository, times(1)).save(any(Transaction.class));
     }
 

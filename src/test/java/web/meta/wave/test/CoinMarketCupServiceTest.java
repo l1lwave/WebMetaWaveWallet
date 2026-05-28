@@ -30,7 +30,6 @@ public class CoinMarketCupServiceTest {
     public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        // Формируем структуру ответа CoinMarketCap JSON
         String jsonString = "{"
                 + "\"data\": {"
                 + "  \"1\": {"
@@ -46,7 +45,6 @@ public class CoinMarketCupServiceTest {
                 + "}";
         mockTokenJson = JsonParser.parseString(jsonString).getAsJsonObject();
 
-        // Через рефлексию подкладываем данные в private Map<Long, JsonObject> cache
         Field cacheField = CoinMarketCupService.class.getDeclaredField("cache");
         cacheField.setAccessible(true);
         Map<Long, JsonObject> cache = (Map<Long, JsonObject>) cacheField.get(coinMarketCupService);
@@ -73,7 +71,6 @@ public class CoinMarketCupServiceTest {
 
     @Test
     public void testGetMethods_WhenTokenNotFoundInCacheAndFetchFails() {
-        // Запрос для несуществующего ID (вернутся ошибки/null, так как сеть не настроена)
         assertNull(coinMarketCupService.getTokenNameById(999L));
         assertNull(coinMarketCupService.getTokenSymbolById(999L));
         assertEquals(-1, coinMarketCupService.getTokenRateById(999L), 0.0);

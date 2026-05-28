@@ -57,14 +57,13 @@ public class NotificationsServiceTest {
         Notifications n1 = new Notifications();
         Notifications n2 = new Notifications();
 
-        // Используем ArrayList, так как Collections.reverse изменяет структуру на месте
         List<Notifications> list = new ArrayList<>(List.of(n1, n2));
         when(notificationsRepository.findAll()).thenReturn(list);
 
         List<Notifications> reverseList = notificationsService.getReverseList();
 
         assertEquals(2, reverseList.size());
-        assertEquals(n2, reverseList.get(0)); // Первый элемент стал последним
+        assertEquals(n2, reverseList.get(0));
         assertEquals(n1, reverseList.get(1));
     }
 }

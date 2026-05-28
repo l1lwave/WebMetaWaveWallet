@@ -50,7 +50,6 @@ public class BuyCryptoServiceTest {
 
     @Test
     public void testBuyCrypto_InvalidParams_ReturnsParametersError() {
-        // Проверка на null и пустые строки
         String result = buyCryptoService.buyCrypto("", "1", "1", user);
         assertEquals(buyCryptoStatements.getParametersError(), result);
 
@@ -84,7 +83,7 @@ public class BuyCryptoServiceTest {
 
     @Test
     public void testBuyCrypto_TokenValueInvalid_ReturnsTokenUnavailableError() {
-        token.setTokenValue(BigDecimal.ZERO); // Токен недоступен по нулевой цене
+        token.setTokenValue(BigDecimal.ZERO);
         when(networkService.findById(1L)).thenReturn(Optional.of(network));
         when(tokenService.findByTokenId(1L)).thenReturn(Optional.of(token));
 
@@ -118,7 +117,7 @@ public class BuyCryptoServiceTest {
     @Test
     public void testCalculateCryptoAmount() {
         BigDecimal usdAmount = new BigDecimal("100");
-        BigDecimal tokenPrice = new BigDecimal("3"); // 100 / 3 = 33.3333333333...
+        BigDecimal tokenPrice = new BigDecimal("3");
 
         BigDecimal result = buyCryptoService.calculateCryptoAmount(usdAmount, tokenPrice);
 
