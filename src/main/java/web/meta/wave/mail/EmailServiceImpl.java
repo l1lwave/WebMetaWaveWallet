@@ -1,34 +1,25 @@
 package web.meta.wave.mail;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 @Component
 public class EmailServiceImpl implements EmailService {
 
-    private final JavaMailSender emailSender;
+    @Value("${brevo.api.key}")
+    private String apiKey;
 
     @Value("${spring.mail.username}")
     private String fromAddress;
 
-    public EmailServiceImpl(JavaMailSender emailSender) {
-        this.emailSender = emailSender;
-    }
-
     @Override
     public void sendMessage(String to, String code) {
         try {
-            MimeMessage message = emailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-            helper.setFrom(fromAddress);
-            helper.setTo(to);
-            helper.setSubject("WebMetaWave: Your Wallet Verification Code");
-
             String htmlContent = "<div style=\"font-family: Arial, sans-serif; background-color: #1c1e26; color: #ffffff; padding: 40px; text-align: center; border-radius: 10px; max-width: 500px; margin: auto; border: 1px solid #37474f;\">"
                     + "<h2 style=\"color: #4CAF50; margin-bottom: 5px;\">WEBMETAWAVE</h2>"
                     + "<h3 style=\"color: #ffffff; margin-top: 0;\">SECURITY SYSTEM</h3>"
@@ -42,12 +33,33 @@ public class EmailServiceImpl implements EmailService {
                     + "<p style=\"font-size: 12px; color: #546e7a;\">&copy; 2026 WEBMETAWAVE. ALL RIGHTS RESERVED.</p>"
                     + "</div>";
 
-            helper.setText(htmlContent, true);
+            // Escape HTML for JSON
+            String escapedHtml = htmlContent.replace("\"", "\\\"");
 
-            emailSender.send(message);
+            String json = "{"
+                    + "\"sender\":{\"email\":\"" + fromAddress + "\"},"
+                    + "\"to\":[{\"email\":\"" + to + "\"}],"
+                    + "\"subject\":\"WebMetaWave: Your Wallet Verification Code\","
+                    + "\"htmlContent\":\"" + escapedHtml + "\""
+                    + "}";
 
-        } catch (MessagingException e) {
-            System.err.println("Error: " + e.getMessage());
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
+                    .header("accept", "application/json")
+                    .header("api-key", apiKey)
+                    .header("content-type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(json))
+                    .build();
+
+            HttpResponse<String> response = HttpClient.newHttpClient()
+                    .send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 201) {
+                System.err.println("Brevo API error: " + response.statusCode() + " " + response.body());
+            }
+
+        } catch (Exception e) {
+            System.err.println("Email error: " + e.getMessage());
             e.printStackTrace();
         }
     }
