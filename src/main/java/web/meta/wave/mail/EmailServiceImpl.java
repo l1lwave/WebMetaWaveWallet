@@ -19,6 +19,11 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendMessage(String to, String code) {
+        System.out.println("=== sendMessage called ===");
+        System.out.println("To: " + to);
+        System.out.println("API key present: " + (apiKey != null && !apiKey.isEmpty()));
+        System.out.println("From: " + fromAddress);
+
         try {
             String htmlContent = "<div style=\"font-family: Arial, sans-serif; background-color: #1c1e26; color: #ffffff; padding: 40px; text-align: center; border-radius: 10px; max-width: 500px; margin: auto; border: 1px solid #37474f;\">"
                     + "<h2 style=\"color: #4CAF50; margin-bottom: 5px;\">WEBMETAWAVE</h2>"
@@ -33,8 +38,7 @@ public class EmailServiceImpl implements EmailService {
                     + "<p style=\"font-size: 12px; color: #546e7a;\">&copy; 2026 WEBMETAWAVE. ALL RIGHTS RESERVED.</p>"
                     + "</div>";
 
-            // Escape HTML for JSON
-            String escapedHtml = htmlContent.replace("\"", "\\\"");
+            String escapedHtml = htmlContent.replace("\\", "\\\\").replace("\"", "\\\"");
 
             String json = "{"
                     + "\"sender\":{\"email\":\"" + fromAddress + "\"},"
@@ -42,6 +46,8 @@ public class EmailServiceImpl implements EmailService {
                     + "\"subject\":\"WebMetaWave: Your Wallet Verification Code\","
                     + "\"htmlContent\":\"" + escapedHtml + "\""
                     + "}";
+
+            System.out.println("Sending request to Brevo API...");
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
@@ -54,9 +60,8 @@ public class EmailServiceImpl implements EmailService {
             HttpResponse<String> response = HttpClient.newHttpClient()
                     .send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() != 201) {
-                System.err.println("Brevo API error: " + response.statusCode() + " " + response.body());
-            }
+            System.out.println("Brevo response status: " + response.statusCode());
+            System.out.println("Brevo response body: " + response.body());
 
         } catch (Exception e) {
             System.err.println("Email error: " + e.getMessage());
