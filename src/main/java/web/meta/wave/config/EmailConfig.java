@@ -10,7 +10,7 @@ import web.meta.wave.statements.ConfigStatements;
 
 @Configuration
 @EnableScheduling
-@PropertySource("classpath:application.properties")
+@PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
 public class EmailConfig {
     private static final ConfigStatements configStatements = new ConfigStatements();
 
