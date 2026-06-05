@@ -100,19 +100,21 @@
         Swap
       </button>
 
-      <div class="popup" th:if="${transactionDone}"
-           style="border: 5px solid;">
-        <img class="correct-status" th:src="@{/images/icons/Vector.svg}" alt="">
-        <p>Transaction is done</p>
-        <a th:href="@{/swapToken}">Back</a>
+      <div class="popup popup--success" th:if="${transactionDone}">
+        <div class="popup__icon popup__icon--success">
+          <img th:src="@{/images/icons/Vector.svg}" alt="Success">
+        </div>
+        <p class="popup__title">Transaction is done</p>
+        <a class="popup__back-btn" th:href="@{/swapToken}">← Back</a>
       </div>
 
-      <div class="popup" th:if="${transactionFail}"
-           style="border: 5px solid;">
-        <img class="correct-status" th:src="@{/images/icons/Vector1.svg}" alt="">
-        <p>Transaction is fail</p>
-        <p th:text="${failText}"></p>
-        <a th:href="@{/swapToken}">Back</a>
+      <div class="popup popup--fail" th:if="${transactionFail}">
+        <div class="popup__icon popup__icon--fail">
+          <img th:src="@{/images/icons/Vector1.svg}" alt="Failure">
+        </div>
+        <p class="popup__title">Transaction is fail</p>
+        <p class="popup__sub" th:text="${failText}"></p>
+        <a class="popup__back-btn" th:href="@{/swapToken}">← Back</a>
       </div>
     </div>
   </form>
