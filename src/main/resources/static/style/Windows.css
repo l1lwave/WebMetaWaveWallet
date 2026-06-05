@@ -43,7 +43,7 @@ summary::-webkit-details-marker {
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 4px;
